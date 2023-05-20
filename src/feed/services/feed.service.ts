@@ -22,11 +22,21 @@ export class FeedService {
     return from(this.feedPostRepository.find());
   }
 
+  // PHAN TRANG BAI VIET
+  paginationPosts(take: number, skip: number): Observable<FeedPost[]> {
+    return from(
+      this.feedPostRepository.findAndCount({ take, skip }).then((posts) => {
+        return <FeedPost[]>posts;
+      })
+    );
+  }
+
   // UPDATE BAI VIET
   updatePost(id: string, feedPost: FeedPost): Observable<UpdateResult> {
     return from(this.feedPostRepository.update(id, feedPost));
   }
 
+  // XOA BAI VIET
   deletePost(id: string): Observable<DeleteResult> {
     return from(this.feedPostRepository.delete(id));
   }

@@ -6,6 +6,7 @@ import {
   Param,
   Post,
   Put,
+  Query,
 } from '@nestjs/common';
 import { FeedService } from '../services/feed.service';
 import { FeedPost } from '../models/post.interface';
@@ -26,6 +27,16 @@ export class FeedController {
   @Get()
   findAll(): Observable<FeedPost[]> {
     return this.feedService.findAllPost();
+  }
+
+  // PAGINATION FOR INFINITE SCROLL
+  @Get('pagination')
+  findSelected(
+    @Query('take') take: number,
+    @Query('skip') skip: number
+  ): Observable<FeedPost[]> {
+    take = take > 20 ? 20 : take;
+    return this.feedService.paginationPosts(take, skip);
   }
 
   // CHINH SUA BAI VIET
