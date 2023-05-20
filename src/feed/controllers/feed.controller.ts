@@ -6,24 +6,29 @@ import {
   Param,
   Post,
   Put,
+  Request,
   Query,
+  UseGuards,
 } from '@nestjs/common';
 import { FeedService } from '../services/feed.service';
 import { FeedPost } from '../models/post.interface';
 import { Observable } from 'rxjs';
 import { DeleteResult, UpdateResult } from 'typeorm';
+import { JwtGuard } from 'src/auth/guards/jwt.guard';
 
 @Controller('feed')
 export class FeedController {
   constructor(private feedService: FeedService) {}
 
+  // CO THANG NAY THI DUNG ACCESS TOKEN MOI LAY DUOC DATA
+  @UseGuards(JwtGuard)
   // DUONG DAN TAO BAI VIET MOI
   @Post()
-  create(@Body() feedPost: FeedPost): Observable<FeedPost> {
-    return this.feedService.createPost(feedPost);
+  create(@Body() feedPost: FeedPost, @Request() req): Observable<FeedPost> {
+    return this.feedService.createPost(req.user, feedPost);
   }
 
-  // DUONG DAN LAY TAT CA SAN PHAM
+  // DUONG DAN LAY TAT CA BAI VIET
   @Get()
   findAll(): Observable<FeedPost[]> {
     return this.feedService.findAllPost();
