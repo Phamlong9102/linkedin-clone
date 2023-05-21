@@ -45,6 +45,7 @@ export class AuthService {
     );
   }
 
+  // XAC MINH USER
   validateUser(email: string, password: string): Observable<User> {
     return from(
       this.userRepository.findOne({
@@ -74,6 +75,21 @@ export class AuthService {
           // create JWT - credentials
           return from(this.jwtService.signAsync({ user }));
         }
+      })
+    );
+  }
+
+  // TIM USER BANG ID
+  findUserById(id: string): Observable<User> {
+    return from(
+      this.userRepository.findOne({
+        where: { id },
+        relations: ['feedPosts'],
+      })
+    ).pipe(
+      map((user: User) => {
+        delete user.password;
+        return user;
       })
     );
   }
