@@ -20,7 +20,7 @@ export class UserEntity {
   password: string;
 
   @Column({ type: 'enum', enum: Role, default: Role.USER })
-  role: Role;
+  role: string;
 
   // 1 USER CO THE CO NHIEU BAI VIET
   @OneToMany(() => FeedPostEntity, (feedPostEntity) => feedPostEntity.author)

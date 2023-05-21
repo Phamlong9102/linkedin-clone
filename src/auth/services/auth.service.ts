@@ -23,7 +23,7 @@ export class AuthService {
 
   // DANG KI NEW USER
   registerAccount(user: User): Observable<User> {
-    const { firstName, lastName, email, password } = user;
+    const { firstName, lastName, email, password, role } = user;
 
     return this.hashPassword(password).pipe(
       switchMap((hashedPassword: string) => {
@@ -33,6 +33,7 @@ export class AuthService {
             lastName,
             email,
             password: hashedPassword,
+            role,
           })
         ).pipe(
           map((user: User) => {

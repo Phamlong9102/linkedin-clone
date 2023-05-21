@@ -15,13 +15,18 @@ import { FeedPost } from '../models/post.interface';
 import { Observable } from 'rxjs';
 import { DeleteResult, UpdateResult } from 'typeorm';
 import { JwtGuard } from 'src/auth/guards/jwt.guard';
+import { Roles } from 'src/auth/decorators/roles.decorator';
+import { Role } from 'src/auth/models/role.enum';
+import { RolesGuard } from 'src/auth/guards/roles.guard';
 
 @Controller('feed')
 export class FeedController {
   constructor(private feedService: FeedService) {}
 
-  // CO THANG NAY THI DUNG ACCESS TOKEN MOI LAY DUOC DATA
-  @UseGuards(JwtGuard)
+  // THEM ROLE VAO DAY DE TAO BAI VIET
+  @Roles(Role.ADMIN, Role.PREMIUM)
+  // CO THANG NAY THI DUNG ACCESS TOKEN TAO DUOC BAI VIET
+  @UseGuards(JwtGuard, RolesGuard)
   // DUONG DAN TAO BAI VIET MOI
   @Post()
   create(@Body() feedPost: FeedPost, @Request() req): Observable<FeedPost> {
